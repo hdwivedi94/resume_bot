@@ -30,7 +30,7 @@ def initialize_rag():
 vector_db = initialize_rag()
 
 # 3. Setup LLM & Chat Interface
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest", st.secrets["GOOGLE_API_KEY"], temperature=0)
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest", st.secrets["GOOGLE_API_KEY"])
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm, 
     chain_type="stuff", 
