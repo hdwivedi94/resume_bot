@@ -30,6 +30,13 @@ def initialize_rag():
 vector_db = initialize_rag()
 
 # 3. Setup LLM & Chat Interface
+
+import google.generativeai as genai
+genai.configure(api_key=gemini_api_key)
+for m in genai.list_models():
+    if 'generateContent' in m.supported_generation_methods:
+        print(m.name)
+
 llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-002", google_api_key=gemini_api_key)
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm, 
