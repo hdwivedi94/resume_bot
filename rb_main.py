@@ -12,7 +12,7 @@ st.set_page_config(page_title="Resume Chatbot", page_icon="🤖")
 st.title("Chat with my Resume")
 
 groq_api_key = st.secrets["GROQ_API_KEY"]
-st.write(f"Key starts with: {api_key[:10]}...")
+st.write(f"Key starts with: {groq_api_key[:10]}...")
 
 # 2. Initialize RAG Components
 @st.cache_resource
