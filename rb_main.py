@@ -12,6 +12,7 @@ st.set_page_config(page_title="Resume Chatbot", page_icon="🤖")
 st.title("Chat with my Resume")
 
 groq_api_key = st.secrets["GROQ_API_KEY"]
+st.write(f"Key starts with: {api_key[:10]}...")
 
 # 2. Initialize RAG Components
 @st.cache_resource
@@ -30,13 +31,6 @@ def initialize_rag():
 vector_db = initialize_rag()
 
 # 3. Setup LLM & Chat Interface
-
-import google.generativeai as genai
-genai.configure(api_key=groq_api_key)
-for m in genai.list_models():
-    if 'generateContent' in m.supported_generation_methods:
-        print(m.name)
-
 #llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-002", google_api_key=gemini_api_key)
 llm = ChatGroq(
     temperature=0,
