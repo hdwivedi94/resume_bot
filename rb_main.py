@@ -57,14 +57,18 @@ qa_chain = RetrievalQA.from_chain_type(
     retriever=vector_db.as_retriever()
 )
 
-# Chat UI
+# Initialize session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
-# 1. Helper function to handle button clicks
+
+if "clicked_question" not in st.session_state:
+    st.session_state.clicked_question = None
+
+# 4. Helper function
 def handle_click(question):
     st.session_state.clicked_question = question
 
-# 2. Layout for buttons
+# 5. Layout for buttons
 st.write("### ⚡ Quick Actions")
 col1, col2, col3 = st.columns(3)
 
@@ -75,25 +79,33 @@ with col2:
 with col3:
     st.button("Contact Info", on_click=handle_click, args=["How can I contact this person?"])
 
-# 3. Check if a button was clicked or text was entered
-prompt = st.chat_input("Ask about my experience...")
+# 6. Check for input (Either from chat_input OR button click)
+user_input = st.chat_input("Ask about my experience...")
+prompt = user_input or st.session_state.clicked_question
 
-# If a button was clicked, override the prompt
-if "clicked_question" in st.session_state and st.session_state.clicked_question:
-    prompt = st.session_state.clicked_question
-    st.session_state.clicked_question = None # Reset so it doesn't loop
-
+# 7. Display Chat History (Keeps the UI consistent)
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("Ask about my experience..."):
+# 8. Handle the new Prompt
+if prompt:
+    # Reset the clicked question immediately
+    st.session_state.clicked_question = None
+    
+    # Add user message to state and display
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # Generate and display Assistant response
     with st.chat_message("assistant"):
-        response = qa_chain.invoke(prompt)
-        answer = response["result"]
-        st.markdown(answer)
-        st.session_state.messages.append({"role": "assistant", "content": answer})
+        with st.spinner("Thinking..."): # Added a nice loading spinner
+            response = qa_chain.invoke(prompt)
+            answer = response["result"]
+            st.markdown(answer)
+            st.session_state.messages.append({"role": "assistant", "content": answer})
+            
+    # Force a rerun to clear the button state if a button was used
+    if not user_input:
+        st.rerun()
