@@ -9,8 +9,23 @@ from langchain_classic.chains import RetrievalQA
 
 # 1. Setup Page & API Key
 st.set_page_config(page_title="Resume Chatbot", page_icon="🤖")
-st.title("Chat with my Resume")
-
+#st.title("Chat with my Resume")
+with st.sidebar:
+    #st.image("your_profile_picture.jpg", width=150) # If you have one
+    st.title("Harsh Resume Bot")
+    st.subheader("Application Development Team Lead")
+    
+    st.markdown("---")
+    st.markdown("### 📍 Location")
+    st.write("Pune, Maharashtra, India")
+    
+    st.markdown("### 🔗 Links")
+    st.markdown("[LinkedIn] https://www.linkedin.com/in/harsh-dwivedi-14b666204/")
+    st.markdown("[GitHub](your_link_here)")
+    
+    st.markdown("---")
+    st.info("This bot uses Llama 3 and RAG to answer questions based on my official resume.")
+    
 groq_api_key = st.secrets["GROQ_API_KEY"]
 
 # 2. Initialize RAG Components
