@@ -1,10 +1,8 @@
 langchain
 langchain-community
-langchain-google-genai
+langchain-groq
 langchain-text-splitters
 langchain-huggingface[full]
-google-generativeai
-pydantic>=2.0
 pypdf
 faiss-cpu
 sentence-transformers
