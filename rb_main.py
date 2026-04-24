@@ -13,7 +13,7 @@ st.set_page_config(page_title="Resume Chatbot", page_icon="🤖")
 with st.sidebar:
     #st.image("your_profile_picture.jpg", width=150) # If you have one
     st.title("Harsh Resume Bot")
-    st.subheader("Application Development Team Lead")
+    st.subheader("Bridging the gap between my experience and your questions with AI")
     
     st.markdown("---")
     st.markdown("### 📍 Location")
@@ -21,7 +21,7 @@ with st.sidebar:
     
     st.markdown("### 🔗 Links")
     st.markdown("[LinkedIn] https://www.linkedin.com/in/harsh-dwivedi-14b666204/")
-    st.markdown("[GitHub](your_link_here)")
+    st.markdown("[GitHub] https://github.com/hdwivedi94")
     
     st.markdown("---")
     st.info("This bot uses Llama 3 and RAG to answer questions based on my official resume.")
@@ -60,6 +60,28 @@ qa_chain = RetrievalQA.from_chain_type(
 # Chat UI
 if "messages" not in st.session_state:
     st.session_state.messages = []
+# 1. Helper function to handle button clicks
+def handle_click(question):
+    st.session_state.clicked_question = question
+
+# 2. Layout for buttons
+st.write("### ⚡ Quick Actions")
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.button("Summarize Profile", on_click=handle_click, args=["Give me a 3-sentence summary of this candidate's career."])
+with col2:
+    st.button("Top Skills", on_click=handle_click, args=["What are the top 5 technical skills listed in this resume?"])
+with col3:
+    st.button("Contact Info", on_click=handle_click, args=["How can I contact this person?"])
+
+# 3. Check if a button was clicked or text was entered
+prompt = st.chat_input("Ask about my experience...")
+
+# If a button was clicked, override the prompt
+if "clicked_question" in st.session_state and st.session_state.clicked_question:
+    prompt = st.session_state.clicked_question
+    st.session_state.clicked_question = None # Reset so it doesn't loop
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
