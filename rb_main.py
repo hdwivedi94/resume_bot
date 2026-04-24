@@ -4,7 +4,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from langchain_classic.chains import RetrievalQA
 
 # 1. Setup Page & API Key
@@ -37,7 +37,12 @@ for m in genai.list_models():
     if 'generateContent' in m.supported_generation_methods:
         print(m.name)
 
-llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-002", google_api_key=gemini_api_key)
+#llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-002", google_api_key=gemini_api_key)
+llm = ChatGroq(
+    temperature=0,
+    groq_api_key=st.secrets["GROQ_API_KEY"],
+    model_name="llama-3.3-70b-versatile" # This is a powerful, free model
+)
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm, 
     chain_type="stuff", 
