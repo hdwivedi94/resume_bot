@@ -11,7 +11,7 @@ from langchain_classic.chains import RetrievalQA
 st.set_page_config(page_title="Resume Chatbot", page_icon="🤖")
 st.title("Chat with my Resume")
 
-gemini_api_key = st.secrets["GOOGLE_API_KEY"]
+groq_api_key = st.secrets["GROQ_API_KEY"]
 
 # 2. Initialize RAG Components
 @st.cache_resource
@@ -32,7 +32,7 @@ vector_db = initialize_rag()
 # 3. Setup LLM & Chat Interface
 
 import google.generativeai as genai
-genai.configure(api_key=gemini_api_key)
+genai.configure(api_key=groq_api_key)
 for m in genai.list_models():
     if 'generateContent' in m.supported_generation_methods:
         print(m.name)
@@ -40,7 +40,7 @@ for m in genai.list_models():
 #llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-002", google_api_key=gemini_api_key)
 llm = ChatGroq(
     temperature=0,
-    groq_api_key=st.secrets["GROQ_API_KEY"],
+    groq_api_key=groq_api_key,
     model_name="llama-3.3-70b-versatile" # This is a powerful, free model
 )
 qa_chain = RetrievalQA.from_chain_type(
