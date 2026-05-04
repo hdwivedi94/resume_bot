@@ -32,7 +32,7 @@ groq_api_key = st.secrets["GROQ_API_KEY"]
 @st.cache_resource
 def initialize_rag():
     # Load and Split Resume
-    loader = PyPDFLoader("Resume.pdf") # Ensure filename matches yours
+    loader = PyPDFLoader("RAG_Resume.pdf") # Ensure filename matches yours
     data = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=60)
     chunks = text_splitter.split_documents(data)
